@@ -6,10 +6,10 @@ Our task in this project was to produce a tool for assisting in selecting promis
 
 ### View Tableau Visualizations
 [Showrooms in Tableau](https://public.tableau.com/profile/zhongyi1091#!/vizhome/Ferguson_Tool_final/ShowroomSelection?publish=yes)
+![ShowRooms Sample](https://www.dropbox.com/sh/lb41f57sv014ur1/AAB-CvaRFvwoeOWqtawPB_Gfa?dl=0&lst=&preview=Ferguson+Location.png)
 
 
-
-### Gradient Boost Model details
+### Gradient Boost Model 
 
 ```markdown
 #Load Library
