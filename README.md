@@ -4,13 +4,13 @@ Ferguson has many different kinds of locations, with one of the most important b
 Our task in this project was to produce a tool for assisting in selecting promising showroom locations based on predicted revenue for these locations output from a model that we created.
 
 
-### View Tableau Visualizations
+## View Tableau Visualizations
 
 ![ShowRooms Sample](images/HXH-WbrQ.png)
 
 [You can also view the dashboard on Tableau online](https://public.tableau.com/profile/zhongyi1091#!/vizhome/Ferguson_Tool_final/ShowroomSelection?publish=yes)
 
-### Gradient Boost Model 
+## Gradient Boost Model 
 
 ```markdown
 #Load Library
