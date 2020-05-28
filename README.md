@@ -10,6 +10,15 @@ Our task in this project was to produce a tool for assisting in selecting promis
 
 [You can also view the dashboard on Tableau online](https://public.tableau.com/profile/zhongyi1091#!/vizhome/Ferguson_Tool_final/ShowroomSelection?publish=yes)
 
+
+## Projects Reports
+
+We were able to successfully produce a tool to assist in selecting promising locations for new showrooms. The tool we produced is a dashboard with a map of all ZIP codes that we had any data for, with our model’s predicted revenue for each ZIP code. This dashboard allows for exploration of the highest predicted revenue locations overall, or with other features, such as the highest predicted revenue ZIP codes where there is already a competitor, or only where there is no competitor present.
+<br/>
+The model we used to predict revenue for each ZIP code was a machine learning model called a gradient boosting model, or GBM. The variables that we used for this model included both data we received from Ferguson, and data that we found from reputable government sources. The data from Ferguson that we used in our model included: building permits, population density, estimated showroom demand, population in group quarters, and number of competitors within the ZIP code. The variables that we found from other sources that we included in the model were average adjusted gross income per tax return and the estimated number of construction businesses.
+<br/>
+This model and the dashboard built off of it allowed us to create the list of top clusters (Best_Clusters.xlsx), with clusters currently lacking a Ferguson showroom being especially promising possibilities for new showroom building. Many other variations of this exploration should be possible with the Showroom Location Exploration dashboard.
+
 ## Gradient Boost Model 
 
 ```markdown
