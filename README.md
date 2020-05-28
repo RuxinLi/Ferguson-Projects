@@ -1,37 +1,22 @@
-## Welcome to GitHub Pages
+## Ferguson Showroom Location Selection
 
-You can use the [editor on GitHub](https://github.com/RuxinLi/Fergoson-Projects/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+Ferguson has many different kinds of locations, with one of the most important being their customer-facing showrooms, which sell bath, kitchen, and lighting products. Despite the importance of these showrooms for generating revenue, the selection of locations for the showrooms has been somewhat arbitrary in the past.
+Our task in this project was to produce a tool for assisting in selecting promising showroom locations based on predicted revenue for these locations output from a model that we created.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
+### View the Showrooms
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
 ```markdown
 Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
+### View Tableau Visualizations
+[Link](https://public.tableau.com/profile/zhongyi1091#!/vizhome/Ferguson_Tool_final/ShowroomSelection?publish=yes)
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
 
 **Bold** and _Italic_ and `Code` text
 
 [Link](url) and ![Image](src)
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/RuxinLi/Fergoson-Projects/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
