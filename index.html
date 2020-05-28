@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/Fergoson-Projects/assets/css/style.css?v=1e66d1f3c65e3551dee00c14a6a066bcee4b3277" media="screen" type="text/css">
+    <link rel="stylesheet" href="/Fergoson-Projects/assets/css/print.css" media="print" type="text/css">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Projects Overview | Fergoson-Projects</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Projects Overview" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Ferguson Showrooms Location Selection" />
+<meta property="og:description" content="Ferguson Showrooms Location Selection" />
+<link rel="canonical" href="https://ruxinli.github.io/Fergoson-Projects/" />
+<meta property="og:url" content="https://ruxinli.github.io/Fergoson-Projects/" />
+<meta property="og:site_name" content="Fergoson-Projects" />
+<script type="application/ld+json">
+{"@type":"WebSite","headline":"Projects Overview","url":"https://ruxinli.github.io/Fergoson-Projects/","name":"Fergoson-Projects","description":"Ferguson Showrooms Location Selection","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <a href="https://ruxinli.github.io/Fergoson-Projects/">
+          <h1>Fergoson Projects</h1>
+        </a>
+        <h2>Ferguson Showrooms Location Selection</h2>
+
+          <a href="https://github.com/RuxinLi/Fergoson-Projects" class="button"><small>View project on</small> GitHub</a>
+
+
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h2 id="projects-overview">Projects Overview</h2>
+
+<p>Ferguson has many different kinds of locations, with one of the most important being their customer-facing showrooms, which sell bath, kitchen, and lighting products. Despite the importance of these showrooms for generating revenue, the selection of locations for the showrooms has been somewhat arbitrary in the past.
+<br />
+<br />
+Our task in this project was to produce a tool for assisting in selecting promising showroom locations based on predicted revenue for these locations output from a model that we created.</p>
+
+<h2 id="view-tableau-visualizations">View Tableau Visualizations</h2>
+
+<p><img src="/Fergoson-Projects/images/HXH-WbrQ.png" alt="ShowRooms Sample" /></p>
+
+<p><a href="https://public.tableau.com/profile/zhongyi1091#!/vizhome/Ferguson_Tool_final/ShowroomSelection?publish=yes">You can also view the dashboard on Tableau online</a></p>
+
+<h2 id="projects-reports">Projects Reports</h2>
+
+<p>We were able to successfully produce a tool to assist in selecting promising locations for new showrooms. The tool we produced is a dashboard with a map of all ZIP codes that we had any data for, with our model’s predicted revenue for each ZIP code. This dashboard allows for exploration of the highest predicted revenue locations overall, or with other features, such as the highest predicted revenue ZIP codes where there is already a competitor, or only where there is no competitor present.
+<br /><br />
+The model we used to predict revenue for each ZIP code was a machine learning model called a gradient boosting model, or GBM. The variables that we used for this model included both data we received from Ferguson, and data that we found from reputable government sources. The data from Ferguson that we used in our model included: building permits, population density, estimated showroom demand, population in group quarters, and number of competitors within the ZIP code. The variables that we found from other sources that we included in the model were average adjusted gross income per tax return and the estimated number of construction businesses.
+<br /><br />
+This model and the dashboard built off of it allowed us to create the list of top clusters (Best_Clusters.xlsx), with clusters currently lacking a Ferguson showroom being especially promising possibilities for new showroom building. Many other variations of this exploration should be possible with the Showroom Location Exploration dashboard.</p>
+
+<h2 id="gradient-boost-model">Gradient Boost Model</h2>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gh">#Load Library</span>
+rm(list=ls())
+library(dplyr)
+<span class="gh"># install.packages("ggcorrplot")</span>
+library(ggcorrplot)
+set.seed(1)
+<span class="gh">#MASTER DATASET</span>
+masterData &lt;- read.csv("MASTER.csv", header=T)
+<span class="gh">#new column</span>
+masterData$X2016.Population.in.Group.Quarters.Rate &lt;- (masterData$X2016.Population.in.Group.Quarters / masterData$X2016.Total.Population) <span class="err">*</span> 100
+<span class="gh">#Select columns</span>
+masterDataSubset <span class="nt">&lt;-</span> <span class="na">masterData</span> <span class="err">%</span><span class="nt">&gt;</span>% select(Showroom.Demand,Permits, est...constr.bus,
+                                          X2016.Population.in.Group.Quarters,
+                                          X2016.Population.Density,
+                                          Avg_AGI_per_return,
+                                          competitor.count,revenue)
+sum(is.na(masterDataSubset)) #81512
+sapply(masterDataSubset, function(x) sum(is.na(x)))
+masterDataSubset[is.na(masterDataSubset)] &lt;- 0
+sum(is.na(masterDataSubset)) #0
+<span class="gh">#subset on only ferguson showroom</span>
+ferguson = filter(masterData, !is.na(masterData$revenue) | masterData$revenue != "")
+summary(ferguson)
+ferguson_subset= ferguson %&gt;% select(Showroom.Demand,Permits, est...constr.bus,
+                                     X2016.Population.in.Group.Quarters,
+                                     X2016.Population.Density,
+                                     Avg_AGI_per_return,
+                                     competitor.count,revenue)
+sum(is.na(ferguson_subset)) #5
+<span class="gh">#X2016.Population.in.Families -&gt;1, Avg_AGI_per_return -&gt;2</span>
+ferguson_subset[is.na(ferguson_subset)] &lt;- 0
+<span class="gh">#correlation</span>
+corr &lt;- round(cor(ferguson_subset), 3)
+<span class="gh">#Train&amp;Validate</span>
+n &lt;- nrow(ferguson_subset)
+trainprop = 0.8
+train  &lt;-  sample(n, trainprop <span class="err">*</span> n)
+validate  &lt;-  sample(setdiff(1:n, train))
+trainset &lt;- ferguson_subset[train,]
+validateset &lt;- ferguson_subset[validate,]
+<span class="gh">#gbm</span>
+library(gbm)
+gbmMod &lt;- gbm(revenue~.,data=trainset,distribution="gaussian",n.trees=5000,interaction.depth=4)
+summary(gbmMod)
+yhat.boost &lt;- predict(gbmMod,newdata=validateset,n.trees=5000)
+gbmMSE=mean((yhat.boost-validateset$revenue)^2)
+gbmMSE
+<span class="gh">#prediction</span>
+masterDataSubset$predicted_rev &lt;- predict(gbmMod,newdata=masterDataSubset,n.trees=5000)
+boosting_predictions &lt;- masterDataSubset
+summary(boosting_predictions)
+<span class="gh">#save file </span>
+write.csv(boosting_predictions, 'boosting_predictions_with_rate.csv',row.names = F)
+
+</code></pre></div></div>
+
+
+        </section>
+
+        <aside id="sidebar">
+
+
+            <p class="repo-owner"><a href="https://github.com/RuxinLi/Fergoson-Projects">Fergoson Projects</a> <a href="https://github.com/RuxinLi">RuxinLi</a>.</p>
+
+        </aside>
+      </div>
+    </div>
+
+
+  </body>
+</html>
